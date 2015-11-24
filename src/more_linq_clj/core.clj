@@ -12,7 +12,7 @@
   ;(doseq [ item (series/bills-for-amount) ]
   ;(doseq [ item (series/moving-average) ]
   ;(doseq [ item (series/comulative-sum) ]
-  ;(doseq [ item (series/l-system) ]
+  (doseq [ item (series/l-system) ]
   ;(let [ item (series/koch-curve) ]
   ;  (spit "koch-curve.txt" item)))
   ;(let [ item (series/sierpinski-triangle) ]
@@ -25,5 +25,5 @@
   ;(doseq [ item (series/armstrong-nums) ]
   ;(doseq [ item (series/dudeney-nums) ]
   ;(doseq [ item (series/sum-product-nums) ]
-  (doseq [ item (series/factorion-nums) ]
+  ;(doseq [ item (series/factorion-nums) ]
     (println item)))

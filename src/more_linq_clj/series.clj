@@ -8,8 +8,11 @@
     (map * v1 v2)))
 
 (defn pythagorean-triples [ ]
-  (for [ c (range 2, 12) ]
-    { :length (* c 2) :height (- (* c c) 1) :hypotenuse (+ (* c c) 1) }))
+  (let [ nums (range 2 12)
+         create-triple
+         (fn [ num ] { :length (* num 2) :height (- (* num num) 1)
+                       :hypotenuse (+ (* num num) 1) }) ]
+    (map create-triple nums)))
 
 (defn weighted-sum [ ]
   (let [ values [ 1 2 3 ]
@@ -18,45 +21,48 @@
 
 (defn percentile [ ]
   (let [ marks [ 20 15 31 34 35 40 50 90 99 100 ]
-         marks-count (count marks) ]
-    (for [ mark marks ]
-      (let [ lo-marks (filter #(< %1 mark) marks)
-             percentile (* (/ (count lo-marks) marks-count) 100) ]
-        { :mark mark :percentile percentile }))))
+         marks-count (count marks)
+         caclulate-percentile
+         (fn [ mark ]
+           (let [ lo-marks (filter #(< %1 mark) marks)
+                  percentile (* (/ (count lo-marks) marks-count) 100) ]
+             { :mark mark :percentile percentile })) ]
+    (map caclulate-percentile marks)))
 
 (defn rank [ ]
   (let [ percentiles (percentile)
-         rank-range (range 1 (->> percentiles count inc)) ]
+         rank-range (range 1 (->> percentiles count inc))
+         add-rank (fn [ perc rank ] (assoc perc :rank rank)) ]
     (as-> percentiles $
       (sort-by :percentile #(compare %2 %1) $)
-      (map #(assoc %1 :rank %2) $ rank-range))))
+      (map add-rank $ rank-range))))
 
 (defn dominator [ ]
   (let [ nums [ 3 4 3 2 3 -1 3 3 ]
-         half-nums (-> nums count (/ 2)) ]
-    (->> nums frequencies (filter (fn [ [ _ freq ] ] (>= freq half-nums)))
-      first second)))
+         half-nums (-> nums count (/ 2))
+         is-dominator (fn [ [ _ freq ] ] (>= freq half-nums)) ]
+    (->> nums frequencies (filter is-dominator) first first)))
 
 (defn all-bills-for-amount [ bills amount ]
   (loop [ amount-rem amount
-          bill-quantities (sorted-map-by #(compare %2 %1))
+          added-bills (sorted-map-by #(compare %2 %1))
           [ bill & bill-rest ] (sort #(compare %2 %1) bills) ]
     (if (nil? bill)
-      bill-quantities
+      added-bills
       (recur (rem amount-rem bill)
-        (assoc bill-quantities bill (quot amount-rem bill))
-        bill-rest))))
+        (assoc added-bills bill (quot amount-rem bill)) bill-rest))))
 
 (defn bills-for-amount [ ]
   (let [ bills [ 500 100 50 20 10 5 2 1 1000 ]
          amount 2548
-         all-bills (all-bills-for-amount bills amount) ]
-    (remove (fn [ [ _ quantity ] ] (zero? quantity)) all-bills)))
+         all-bills (all-bills-for-amount bills amount)
+         has-bills? (fn [ [ _ num ] ] (-> num zero? not)) ]
+    (filter has-bills? all-bills)))
 
 (defn moving-average [ ]
   (let [ nums [ 1 2 3 4 ]
          window 2
-         average #(/ (apply + %) (count %)) ]
+         average (fn [ nums ] (/ (apply + nums) (count nums))) ]
     (->> nums (partition window 1) (map average))))
 
 (defn comulative-sum [ ]
@@ -68,25 +74,40 @@
         acc
         (recur (assoc acc num (+ sum num)) (+ sum num) num-rest)))))
 
+(defn next-algae [ algae ]
+  (-> algae (str/replace "B" "[B]")
+    (str/replace "A" "AB") (str/replace "[B]" "A")))
+
 (defn raw-l-system [ steps ]
-  (reductions
-    (fn [ algae, _ ]
-      (-> algae (str/replace "B" "[B]")
-        (str/replace "A" "AB") (str/replace "[B]" "A")))
-    "A" (range steps)))
+  (loop [ step 0
+          algae "A"
+          algaes [ ] ]
+    (if (> step steps)
+      algaes
+      (recur (inc step) (next-algae algae)
+        (conj algaes { :step step :algae algae })))))
 
 (defn l-system [ ]
   (let [ steps 7
-         system (raw-l-system steps) ]
-    (map-indexed
-      (fn [ step algae ]
-        { :step step :algae algae :length (count algae) }) system)))
+         algaes (raw-l-system steps)
+         add-length
+         (fn [ { :keys [ algae ] :as step } ]
+           (assoc step :length (count algae))) ]
+    (map add-length algaes)))
+
+(defn next-koch [ curve ]
+   (str/replace curve "F" "F+F-F-F+F"))
 
 (defn raw-koch-curve [ steps ]
-  (reduce
-    (fn [ curve _ ]
-      (str/replace curve "F" "F+F-F-F+F"))
-    "F" (range steps)))
+  ;(reduce
+  ;  (fn [ curve _ ]
+  ;    (str/replace curve "F" "F+F-F-F+F"))
+  ;  "F" (range steps)))
+  (loop [ step 0
+          curve "F" ]
+    (if (> step steps)
+      curve
+      (recur (inc step) (next-koch curve)))))
 
 (defn koch-curve [ ]
   (let [ steps 3
