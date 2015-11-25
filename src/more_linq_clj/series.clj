@@ -8,11 +8,11 @@
     (map * v1 v2)))
 
 (defn pythagorean-triples [ ]
-  (let [ nums (range 2 12)
-         create-triple
-         (fn [ num ] { :length (* num 2) :height (- (* num num) 1)
-                       :hypotenuse (+ (* num num) 1) }) ]
-    (map create-triple nums)))
+  (let [ triple-num 10
+         calculate-triple
+         (fn [ num ]
+           [ (* num 2) (- (* num num) 1) (+ (* num num) 1) ]) ]
+    (->> (range 2 (+ triple-num 2)) (map calculate-triple))))
 
 (defn weighted-sum [ ]
   (let [ values [ 1 2 3 ]
@@ -25,16 +25,16 @@
          caclulate-percentile
          (fn [ mark ]
            (let [ lo-marks (filter #(< %1 mark) marks)
-                  percentile (* (/ (count lo-marks) marks-count) 100) ]
-             { :mark mark :percentile percentile })) ]
+                  percentile (* (/ (count lo-marks) (count marks)) 100) ]
+             [ mark percentile ])) ]
     (map caclulate-percentile marks)))
 
 (defn rank [ ]
   (let [ percentiles (percentile)
          rank-range (range 1 (->> percentiles count inc))
-         add-rank (fn [ perc rank ] (assoc perc :rank rank)) ]
+         add-rank (fn [ perc rank ] (conj perc rank)) ]
     (as-> percentiles $
-      (sort-by :percentile #(compare %2 %1) $)
+      (sort-by second #(compare %2 %1) $)
       (map add-rank $ rank-range))))
 
 (defn dominator [ ]
@@ -44,20 +44,19 @@
     (->> nums frequencies (filter is-dominator) first first)))
 
 (defn all-bills-for-amount [ bills amount ]
-  (loop [ amount-rem amount
-          added-bills (sorted-map-by #(compare %2 %1))
-          [ bill & bill-rest ] (sort #(compare %2 %1) bills) ]
-    (if (nil? bill)
-      added-bills
-      (recur (rem amount-rem bill)
-        (assoc added-bills bill (quot amount-rem bill)) bill-rest))))
+  (let [ add-bill
+         (fn [ { :keys [ amount bills ] :as total } bill ]
+           (assoc total
+             :amount (rem amount bill)
+             :bills (conj bills [ bill (quot amount bill) ]))) ]
+    (->> bills (sort #(compare %2 %1))
+      (reduce add-bill { :amount amount :bills [ ] }))))
 
 (defn bills-for-amount [ ]
   (let [ bills [ 500 100 50 20 10 5 2 1 1000 ]
          amount 2548
-         all-bills (all-bills-for-amount bills amount)
          has-bills? (fn [ [ _ num ] ] (-> num zero? not)) ]
-    (filter has-bills? all-bills)))
+    (->> amount (all-bills-for-amount bills) :bills (filter has-bills?))))
 
 (defn moving-average [ ]
   (let [ nums [ 1 2 3 4 ]
@@ -66,34 +65,30 @@
     (->> nums (partition window 1) (map average))))
 
 (defn comulative-sum [ ]
-  (let [ nums (range 1 11) ]
-    (loop [ acc (sorted-map)
-            sum 0
-            [ num & num-rest ] nums ]
-      (if (nil? num)
-        acc
-        (recur (assoc acc num (+ sum num)) (+ sum num) num-rest)))))
-
-(defn next-algae [ algae ]
-  (-> algae (str/replace "B" "[B]")
-    (str/replace "A" "AB") (str/replace "[B]" "A")))
-
-(defn raw-l-system [ steps ]
-  (loop [ step 0
-          algae "A"
-          algaes [ ] ]
-    (if (> step steps)
-      algaes
-      (recur (inc step) (next-algae algae)
-        (conj algaes { :step step :algae algae })))))
+  (let [ steps 11
+         sum
+         (fn [ { :keys [ sum sums ] :as total } num ]
+           (let [ new-sum (+ sum num) ]
+             (assoc total
+               :sum new-sum
+               :sums (conj sums [ num new-sum ])))) ]
+    (->> (range steps) (reduce sum { :sum 0 :sums [ ] }) :sums)))
 
 (defn l-system [ ]
-  (let [ steps 7
-         algaes (raw-l-system steps)
-         add-length
-         (fn [ { :keys [ algae ] :as step } ]
-           (assoc step :length (count algae))) ]
-    (map add-length algaes)))
+  (let [ steps 8
+         next-algae
+         (fn [ algae ]
+           (if (empty? algae)
+             "A"
+             (-> algae (str/replace "B" "[B]")
+               (str/replace "A" "AB") (str/replace "[B]" "A"))))
+         next-step
+         (fn [ { :keys [ algae algaes ] :as steps } step ]
+           (let [ new-algae (next-algae algae) ]
+             (assoc steps
+               :algae new-algae
+               :algaes (conj algaes [ step new-algae (count new-algae) ])))) ]
+  (->> steps range (reduce next-step { :algae "" :algaes [ ] }) :algaes)))
 
 (defn next-koch [ curve ]
    (str/replace curve "F" "F+F-F-F+F"))
