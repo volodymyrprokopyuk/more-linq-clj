@@ -18,12 +18,17 @@
   ;(let [ item (series/sierpinski-triangle) ]
   ;  (spit "sierpinski-triangle.txt" item))) ; http://logo.twentygototen.org/
   ;(doseq [ item (take 11 (series/fibonacci)) ]
-  ;(doseq [ item (series/permutations) ]
-  ;(doseq [ item (series/power-set) ]
+  ;(doseq [ item (series/permutations) ] ; TODO
+  ;(doseq [ item (series/power-set) ] ; TODO
   ;(doseq [ item (take-while #(<= %1 100) (series/nth-element)) ]
   ;(doseq [ item (series/max-of-seqs) ]
   ;(doseq [ item (series/armstrong-nums) ]
   ;(doseq [ item (series/dudeney-nums) ]
   ;(doseq [ item (series/sum-product-nums) ]
-  (doseq [ item (series/factorion-nums) ]
+  ;(doseq [ item (series/factorion-nums) ]
+  ;(doseq [ item (take 11 (series/pascal-triangle)) ]
+  ;(doseq [ item (series/tic-tac-toe) ]
+  ;(doseq [ item (series/go-figure) ] ; TODO
+  ;(doseq [ item (series/matching-pairs) ]
+  (doseq [ item (series/hash-approach) ]
     (println item)))

@@ -162,3 +162,46 @@
 
 (defn factorion-nums [ ]
   (->> 1001 range (filter is-factorion?)))
+
+(defn next-pascal [ nums ]
+  (as-> nums $
+    (partition 2 1 $)
+    (map #(apply + %1) $)
+    (concat [ 1 ] $ [ 1 ])))
+
+(defn pascal-triangle [ ]
+  (->> [ 1 ] seq (iterate next-pascal)))
+
+(defn tic-tac-toe [ ]
+  (let [ size 3
+         board (->> (* size size) inc (range 1))
+         hor (->> board (partition size))
+         ver (->> hor (apply map vector))
+         diag (->> board (take-nth (inc size)) vector)
+         rev (->> hor (mapcat reverse) (take-nth (inc size)) vector) ]
+    (concat hor ver diag rev)))
+
+(defn go-figure [ ]
+  [ "TODO" ])
+
+(defn matching-pairs [ ]
+  (let [ words1 [ "orange" "herbal" "rubble" "indicative" "mandatory"
+                  "brush" "golden" "diplomatic" "pace" ]
+         words2 [ "verbal" "rush" "pragmatic" "story" "race" "bubble"
+                  "olden" ] ]
+    (for [ w1 words1 w2 words2
+           :when (= (re-find #".{3}$" w1) (re-find #".{3}$" w2)) ]
+      [ w1 w2 ])))
+
+(defn hash-approach [ ]
+  (let [ words1 [ "orange" "herbal" "rubble" "indicative" "mandatory"
+                  "brush" "golden" "diplomatic" "pace" ]
+         words2 [ "verbal" "rush" "pragmatic" "story" "race" "bubble"
+                  "olden" ]
+         hash-word
+         (fn [ words word ]
+           (let [ hash (re-find #".{3}$" word)
+                  hash-words (get words hash [ ]) ]
+             (assoc words hash (conj hash-words word)))) ]
+    (->> (concat words1 words2) (reduce hash-word { }) vals
+      (filter #(>= (count %1) 2)))))
