@@ -20,7 +20,7 @@
   ;(doseq [ item (take 11 (series/fibonacci)) ]
   ;(doseq [ item (series/permutations) ] ; TODO
   ;(doseq [ item (series/power-set) ] ; TODO
-  ;(doseq [ item (take-while #(<= %1 100) (series/nth-element)) ]
+  ;(doseq [ item (series/nth-element) ]
   ;(doseq [ item (series/max-of-seqs) ]
   ;(doseq [ item (series/armstrong-nums) ]
   ;(doseq [ item (series/dudeney-nums) ]
@@ -30,5 +30,7 @@
   ;(doseq [ item (series/tic-tac-toe) ]
   ;(doseq [ item (series/go-figure) ] ; TODO
   ;(doseq [ item (series/matching-pairs) ]
-  (doseq [ item (series/hash-approach) ]
+  ;(doseq [ item (series/hash-approach) ]
+  ;(doseq [ item (series/fizz-buzz) ]
+  (doseq [ item (series/fizz-buzz-set) ]
     (println item)))

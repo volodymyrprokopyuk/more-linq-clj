@@ -120,7 +120,7 @@
   [ "TODO" ])
 
 (defn nth-element [ ]
-  (->> 1 (iterate inc) (take-nth 20)))
+  (->> 101 (range 1) (take-nth 20)))
 
 (defn max-of-seqs [ ]
   (let [ as [ 1 2 3 4 5 ]
@@ -205,3 +205,26 @@
              (assoc words hash (conj hash-words word)))) ]
     (->> (concat words1 words2) (reduce hash-word { }) vals
       (filter #(>= (count %1) 2)))))
+
+(defn fizz-buzz [ ]
+  (->> 21 (range 1)
+    (map
+      #(cond
+         (zero? (mod %1 15)) "FizzBuzz"
+         (zero? (mod %1 3)) "Fizz"
+         (zero? (mod %1 5)) "Buzz"
+         :else %1))))
+
+(defn fizz-buzz-set [ ]
+  (let [ all (->> 21 (range 1) set)
+         mod3 (->> all (set/select #(zero? (mod %1 3))))
+         mod5 (->> all (set/select #(zero? (mod %1 5))))
+         mod15 (set/intersection mod3 mod5)
+         neither (set/difference all mod3 mod5) ]
+    (->> all sort
+      (map
+        #(cond
+           (contains? mod15 %1) "FizzBuzz"
+           (contains? mod3 %1) "Fizz"
+           (contains? mod5 %1) "Buzz"
+           :else %1)))))
