@@ -1,5 +1,6 @@
 (ns more-linq-clj.core
-  (:require [ more-linq-clj.series :as series]))
+  (:require [ more-linq-clj.series :as series ])
+  (:require [ more-linq-clj.text :as text ]))
 
 (defn xtest [ ]
   ; SERIES
@@ -32,5 +33,7 @@
   ;(doseq [ item (series/matching-pairs) ]
   ;(doseq [ item (series/hash-approach) ]
   ;(doseq [ item (series/fizz-buzz) ]
-  (doseq [ item (series/fizz-buzz-set) ]
+  ;(doseq [ item (series/fizz-buzz-set) ]
+  ; TEXT
+  (doseq [ item (text/t9-dictionary) ]
     (println item)))
