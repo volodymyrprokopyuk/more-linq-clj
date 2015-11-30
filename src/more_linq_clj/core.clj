@@ -1,6 +1,7 @@
 (ns more-linq-clj.core
   (:require [ more-linq-clj.series :as series ])
-  (:require [ more-linq-clj.text :as text ]))
+  (:require [ more-linq-clj.text :as text ])
+  (:require [ more-linq-clj.refactoring1 :as ref1 ]))
 
 (defn xtest [ ]
   ; SERIES
@@ -52,5 +53,14 @@
   ;(doseq [ item (text/all-subsequences) ] ; TODO
   ;(let [ item (text/paragraph-fill) ]
   ;(let [ item (text/bottles-of-milk) ]
-  (doseq [ item (text/abbreviations) ]
+  ;(doseq [ item (text/abbreviations) ]
+  ; REFACTORING1
+  ;(let [ item (ref1/any) ]
+  ;(let [ item (ref1/all) ]
+  ;(doseq [ item (ref1/xtake) ]
+  ;(doseq [ item (ref1/skip) ]
+  ;(doseq [ item (ref1/xtake-while) ]
+  ;(doseq [ item (ref1/skip-while) ]
+  ;(doseq [ item (ref1/where) ]
+  (doseq [ item (ref1/zip) ]
     (println item)))
