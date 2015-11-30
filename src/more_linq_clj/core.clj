@@ -35,5 +35,22 @@
   ;(doseq [ item (series/fizz-buzz) ]
   ;(doseq [ item (series/fizz-buzz-set) ]
   ; TEXT
-  (doseq [ item (text/t9-dictionary) ]
+  ;(doseq [ item (text/t9-dictionary) ]
+  ;(doseq [ item (text/gesture-keyboard) ] ; TODO
+  ;(doseq [ item (text/spelling-correction) ] ; TODO
+  ;(doseq [ item (text/reverse-sentence) ]
+  ;(doseq [ item (text/word-triangle) ]
+  ;(let [ item (text/anagram-sort) ]
+  ;(let [ item (text/anagram-freq) ]
+  ;(doseq [ item (text/syntax-highlighter) ] ; TODO
+  ;(doseq [ item (text/word-ladder) ] ; TODO
+  ;(doseq [ item (text/format-on-the-fly) ] ; TODO
+  ;(let [ item (text/coma-quibbling) ]
+  ;(doseq [ item (take 4 (text/random-serials)) ]
+  ;(doseq [ item (text/all-substrings) ]
+  ;(doseq [ item (text/scrabble-cheater) ] ; TODO
+  ;(doseq [ item (text/all-subsequences) ] ; TODO
+  ;(let [ item (text/paragraph-fill) ]
+  ;(let [ item (text/bottles-of-milk) ]
+  (doseq [ item (text/abbreviations) ]
     (println item)))
