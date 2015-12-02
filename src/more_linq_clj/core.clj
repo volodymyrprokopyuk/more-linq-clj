@@ -1,7 +1,8 @@
 (ns more-linq-clj.core
   (:require [ more-linq-clj.series :as series ])
   (:require [ more-linq-clj.text :as text ])
-  (:require [ more-linq-clj.refactoring1 :as ref1 ]))
+  (:require [ more-linq-clj.refactoring1 :as ref1 ])
+  (:require [ more-linq-clj.refactoring2 :as ref2 ]))
 
 (defn xtest [ ]
   ; SERIES
@@ -75,5 +76,16 @@
   ;(let [ item (ref1/aggregate) ]
   ;(doseq [ item (ref1/select-many-chars) ]
   ;(doseq [ item (ref1/select-many-nums) ]
-  (doseq [ item (take-while #(< %1 1000) (ref1/prime-numbers)) ]
+  ;(doseq [ item (take-while #(< %1 1000) (ref1/prime-numbers)) ]
+  ; REFACTORING2
+  ;(doseq [ item (ref2/scan) ]
+  ;(doseq [ item (ref2/slice) ]
+  ;(doseq [ item (ref2/xinterleave) ]
+  ;(doseq [ item (ref2/windowed) ]
+  ;(doseq [ item (ref2/cartesian-product) ]
+  ;(doseq [ item (ref2/xpartition) ]
+  ;(doseq [ item (ref2/index) ]
+  ;(let [ item (ref2/pair-wise) ]
+  ;(doseq [ item (ref2/for-each) ]
+  (let [ item (ref2/min-by) ]
     (println item)))
