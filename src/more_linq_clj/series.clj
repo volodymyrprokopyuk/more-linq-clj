@@ -147,9 +147,8 @@
 (defn is-sum-product? [ num ]
   (let [ digits (num->digits num)
          sum (apply + digits)
-         prod (apply * digits)
-         sum-prod (* sum prod) ]
-    (== num sum-prod)))
+         prod (apply * digits) ]
+    (== num (* sum prod))))
 
 (defn sum-product-nums [ ]
   (->> 1001 range (filter is-sum-product?)))
