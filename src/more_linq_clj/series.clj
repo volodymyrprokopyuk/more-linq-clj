@@ -107,7 +107,7 @@
     (map first)))
 
 (def fib-seq
-  (lazy-cat [ 0 1 ] (map + (rest fib-seq) fib-seq)))
+  (lazy-cat [ 0 1 ] (map + fib-seq (rest fib-seq))))
 
 (defn fibonacci [ ]
   ;(fib-seq-fn))
