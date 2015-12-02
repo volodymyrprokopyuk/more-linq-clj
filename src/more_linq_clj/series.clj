@@ -129,23 +129,23 @@
          ds [ 9 2 4 1 6 ] ]
     (map max as bs cs ds)))
 
-(defn num->ditits [ num ]
+(defn num->digits [ num ]
   (->> num str (map #(->> %1 str Integer/parseInt))))
 
 (defn is-armstrong? [ num ]
-  (== num (->> num num->ditits (map #(Math/pow %1 3)) (apply +))))
+  (== num (->> num num->digits (map #(Math/pow %1 3)) (apply +))))
 
 (defn armstrong-nums [ ]
   (->> 1001 range (filter is-armstrong?)))
 
 (defn is-dudeney? [ num ]
-  (== num (as-> num $ (num->ditits $) (apply + $) (Math/pow $ 3))))
+  (== num (as-> num $ (num->digits $) (apply + $) (Math/pow $ 3))))
 
 (defn dudeney-nums [ ]
   (->> 1001 range (filter is-dudeney?)))
 
 (defn is-sum-product? [ num ]
-  (let [ digits (num->ditits num)
+  (let [ digits (num->digits num)
          sum (apply + digits)
          prod (apply * digits)
          sum-prod (* sum prod) ]
@@ -158,7 +158,7 @@
   (->> num inc (range 1) (apply *)))
 
 (defn is-factorion? [ num ]
-  (== num (->> num num->ditits (map factorial) (apply +))))
+  (== num (->> num num->digits (map factorial) (apply +))))
 
 (defn factorion-nums [ ]
   (->> 1001 range (filter is-factorion?)))
